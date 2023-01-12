@@ -13,33 +13,30 @@ class Database:
 
         # Create the logins table 
         self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS logins (
-                                        memberId INTEGER PRIMARY KEY,
+                                        memberId INTEGER PRIMARY KEY AUTOINCREMENT,
                                         login TEXT NOT NULL, 
                                         password BLOB NOT NULL
-                                    );
-                                    ''')
+                                    );''')
 
         # Create memebers table
         self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS members (
-                                        memberId INTEGER PRIMARY KEY, 
+                                        memberId INTEGER PRIMARY KEY AUTOINCREMENT, 
                                         name TEXT NOT NULL,
                                         surname TEXT NOT NULL,
                                         address TEXT NOT NULL,
                                         FOREIGN KEY (memberId) REFERENCES logins (memberId)
-                                    )   
-                                    ''')
+                                    );''')
 
         # Create the books table                            
-        self.cursor_object.execute("""CREATE TABLE IF NOT EXISTS books (
-                                ISBN TEXT PRIMARY KEY,
-                                Title TEXT NOT NULL,
-                                Author TEXT NOT NULL,
-                                Publication TEXT NOT NULL
-                            )
-                            """)
+        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS books (
+                                        ISBN TEXT PRIMARY KEY,
+                                        Title TEXT NOT NULL,
+                                        Author TEXT NOT NULL,
+                                        Publication TEXT NOT NULL
+                                    ); ''')
 
         # Create the loans table
-        self.cursor_object.execute("""CREATE TABLE IF NOT EXISTS loans (
+        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS loans (
                                         loanId INTEGER PRIMARY KEY,
                                         memberId INTEGER NOT NULL,
                                         ISBN TEXT NOT NULL,
@@ -47,42 +44,39 @@ class Database:
                                         returnDate TEXT NOT NULL,
                                         FOREIGN KEY (memberId) REFERENCES members (memberId),
                                         FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    )
-                                    """)
+                                    );''')
 
-        self.cursor_object.execute("""CREATE TABLE IF NOT EXISTS reservations (
+        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS reservations (
                                         reservationId INTEGER PRIMARY KEY,
                                         memberId INTEGER NOT NULL,
                                         ISBN TEXT NOT NULL,
                                         reservationDate TEXT NOT NULL,
                                         FOREIGN KEY (memberId) REFERENCES members (memberId),
                                         FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    )
-                                    """)
+                                    );''')
 
-        self.cursor_object.execute("""CREATE TABLE IF NOT EXISTS fines (
+        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS fines (
                                         fineId INTEGER PRIMARY KEY,
                                         memberId INTEGER NOT NULL,
                                         ISBN TEXT NOT NULL,
                                         fineAmount REAL NOT NULL,
                                         FOREIGN KEY (memberId) REFERENCES members (memberId),
                                         FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    )
-                                    """)
+                                    );''')
 
         # Commit the changes
         self.connection.commit()
 
-
+    # Action for logins table
     def get_login(self, login):
         self.cursor_object.execute('''SELECT * FROM logins WHERE login = ?''', (login,))
         return self.cursor_object.fetchone()
 
-
-    def add_member(self, memeber_id, login, password, name, surname, address):
+    # Action for members table
+    def add_member(self, login, password, name, surname, address):
         hash_password = hashlib.sha256(password.encode()).hexdigest()
-        self.cursor_object.execute('''INSERT INTO logins (memberId, login, password) VALUES (?, ?, ?)''', (memeber_id, login, hash_password))        
-        self.cursor_object.execute('''INSERT INTO members (memberId, name, surname, address) VALUES (?, ?, ?, ?)''', (memeber_id, name, surname, address))
+        self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', (login, hash_password))        
+        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', (name, surname, address))
         self.connection.commit()
 
 
@@ -90,7 +84,7 @@ class Database:
         self.cursor_object.execute('''SELECT * FROM members WHERE memberId = ?''', (memberId,))
         return self.cursor_object.fetchone()
 
-
+    # Action for books table
     def add_book(self, ISBN, title, author, publication):
         self.cursor_object.execute('''INSERT INTO books (ISBN, Title, Author, Publication) VALUES (?, ?, ?, ?)''', (ISBN, title, author, publication))
         self.connection.commit()
@@ -115,7 +109,7 @@ class Database:
         self.cursor_object.execute('''UPDATE books SET Title = ?, Author = ?, Publication = ? WHERE ISBN = ?''', (title, author, publication, ISBN))
         self.connection.commit()
 
-    
+    # Action for loans table
     def add_loan(self, memberId, ISBN, loanDate, returnDate):
         self.cursor_object.execute('''INSERT INTO loans (memberId, ISBN, loanDate, returnDate) VALUES (?, ?, ?, ?)''', (memberId, ISBN, loanDate, returnDate))
         self.connection.commit()
@@ -135,7 +129,7 @@ class Database:
         self.cursor_object.execute('''DELETE FROM loans WHERE loanId = ?''', (loanId,))
         self.connection.commit()
 
-    
+    # Action for reservation table
     def add_reservation(self, memberId, ISBN, reservationDate):
         self.cursor_object.execute('''INSERT INTO reservations (memberId, ISBN, reservationDate) VALUES (?, ?, ?)''', (memberId, ISBN, reservationDate))
         self.connection.commit()
@@ -155,7 +149,7 @@ class Database:
         self.cursor_object.execute('''DELETE FROM reservations WHERE reservationId = ?''', (reservationId,))
         self.connection.commit()
 
-
+    # Action for fines table
     def add_fine(self, memberId, ISBN, fineAmount):
         self.cursor_object.execute('''INSERT INTO fines (memberId, ISBN, fineAmount) VALUES (?, ?, ?)''', (memberId, ISBN, fineAmount))
         self.connection.commit()
@@ -182,32 +176,47 @@ class Database:
 
 if __name__ == "__main__":
     db = Database()
-    db.add_member(1, "admin", "admin", "Admin", "Big", "Admin Street 1")
-    print(db.get_login("admin"))
-    print(db.get_member(1))
+    # print("Add member to database")
+    # db.add_member("admin", "admin", "Admin", "Big", "Admin Street 1")
+    # db.add_member("user", "user", "User", "Small", "User Street 2")
+    # print("Get member from database")
+    # print(db.get_login("admin"))
+    # print(db.get_member(1))
+    # print(db.get_member(2))
+    # print(db.get_login("user"))
+
+
+    print("Add book to database")
     db.add_book("1234567890123", "Title", "Author", "Publication")
+    print("Boot from database")
     print(db.get_book("1234567890123"))
     db.add_book("2234567890123", "Title", "Author", "Publication")
+    print("All books from database")
     print(db.get_all_books())
+    print("Delete book from database")
     db.delete_book("1234567890123")
     print(db.get_all_books())
+    print("Update book in database")
     db.add_book("1234567890123", "Title", "Author", "Publication")
     db.update_book("1234567890123", "New Title", "New Author", "New Publication")
     print(db.get_book("1234567890123"))
-    db.add_loan(1, "1234567890123", "2020-01-01", "2020-01-15")
-    print(db.get_loan(1))
-    print(db.get_all_loans())
-    db.delete_loan(1)
-    print(db.get_all_loans())
-    db.add_loan(1, "1234567890123", "2020-01-01", "2020-01-15")
-    db.add_reservation(1, "1234567890123", "2020-01-01")
-    print(db.get_reservation(1))
-    print(db.get_all_reservations())
-    db.delete_reservation(1)
-    print(db.get_all_reservations())
-    db.add_fine(1, "1234567890123", 10)
-    print(db.get_fine(1))
-    print(db.get_all_fines())
-    db.delete_fine(1)
-    print(db.get_all_fines())
+
+
+    print("Add loan to database")
+    # db.add_loan(1, "1234567890123", "2020-01-01", "2020-01-15")
+    # print(db.get_loan(1))
+    # print(db.get_all_loans())
+    # db.delete_loan(1)
+    # print(db.get_all_loans())
+    # db.add_loan(1, "1234567890123", "2020-01-01", "2020-01-15")
+    # db.add_reservation(1, "1234567890123", "2020-01-01")
+    # print(db.get_reservation(1))
+    # print(db.get_all_reservations())
+    # db.delete_reservation(1)
+    # print(db.get_all_reservations())
+    # db.add_fine(1, "1234567890123", 10)
+    # print(db.get_fine(1))
+    # print(db.get_all_fines())
+    # db.delete_fine(1)
+    # print(db.get_all_fines())
     db.close_connection()
