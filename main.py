@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('TKAgg')
 from library.gui import main_window as mw
 from PyQt5.QtWidgets import QApplication
 import sys

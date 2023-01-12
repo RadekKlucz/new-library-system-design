@@ -1,14 +1,18 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtWidgets import QWidget, QFormLayout, QLabel, QLineEdit
 
 
-class GuiElements(QtWidgets.QWidget):      
+class GuiElements(QWidget):
+    def __init__(self):
+        super().__init__()      
       
     def login_panel(self):
-        self.username_label = QtWidgets.QLabel("Username:", self)
-        self.username_field = QtWidgets.QLineEdit(self)
+        self.username_field = QLineEdit()
+        self.password_field = QLineEdit()
+        self.password_field.setEchoMode(QLineEdit.Password)
         
-        self.login_fields_layout = QtWidgets.QVBoxLayout()
-        self.login_fields_layout.addWidget(self.username_label)
-        self.login_fields_layout.addWidget(self.username_field)
-        return self.login_fields_layout   
+        login_fields_layout = QFormLayout()
+        login_fields_layout.addRow(QLabel("Username:"), self.username_field)
+        login_fields_layout.addRow(QLabel("Password:"), self.password_field)
+
+        return login_fields_layout   
         

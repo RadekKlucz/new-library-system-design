@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QTableWidget
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel
 # from library.database import bd
 from library.gui import gui_elements as ge
 
@@ -10,9 +10,12 @@ class MainWindow(QMainWindow):
    
 
     def initUI(self):
-        # Create a button
-        self.button = QPushButton("Log in", self)
-        self.button.clicked.connect(self.gui_elements.login_panel())
+        # Create a log in button
+        self.login_button = QPushButton("Log in", self)
+        self.login_button.clicked.connect(self.gui_elements.login_panel())
+
+        # self.sigin_button = QPushButton("Sign in", self)
+        # self.sigin_button.clicked.connect(self.gui_elements.sign_in_panel())
         
         # Create label 
         self.label = QLabel('''Welcome to library system.\nIn the first step please log in to system''', self)
