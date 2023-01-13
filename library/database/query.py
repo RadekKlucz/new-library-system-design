@@ -12,7 +12,7 @@ class Query(Database):
     # Action for members table
     def add_member(self, login, password, name, surname, address):
         # hash_password = hashlib.sha256(password.encode()).hexdigest()
-        self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', (login, hash_password))        
+        self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', (login, password))        
         self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', (name, surname, address))
         self.connection.commit()
         
@@ -20,8 +20,9 @@ class Query(Database):
         pass
     
 
-    def get_member(self, memberId):
-        self.cursor_object.execute('''SELECT * FROM members WHERE memberId = ?''', (memberId,))
+    def get_member(self, login):
+        self.cursor_object.execute('''SELECT members.memberID, members.name, members.surname, members.address FROM members 
+                                   INNER JOIN logins ON members.memberID = logins.memberId WHERE logins.login = ?''', (login,))
         return self.cursor_object.fetchone()
     
     # def get_all_members(self):
@@ -116,33 +117,33 @@ class Query(Database):
             
 if __name__ == "__main__":
     db = Query()
-    # print("Add member to database")
-    # db.add_member("admin", "admin", "Admin", "Big", "Admin Street 1")
-    # db.add_member("user", "user", "User", "Small", "User Street 2")
-    # print("Get member from database")
-    # print(db.get_login("admin"))
-    # print(db.get_member(1))
-    # print(db.get_member(2))
-    # print(db.get_login("user"))
+    print("Add member to database")
+    db.add_member("admin", "admin", "Admin", "Big", "Admin Street 1")
+    db.add_member("user", "user", "User", "Small", "User Street 2")
+    print("Get member from database")
+    print(db.get_login("admin"))
+    print(db.get_member(1))
+    print(db.get_member(2))
+    print(db.get_login("user"))
 
 
-    print("Add book to database")
-    db.add_book("1234567890123", "Title", "Author", "Publication")
-    print("Boot from database")
-    print(db.get_book("1234567890123"))
-    db.add_book("2234567890123", "Title", "Author", "Publication")
-    print("All books from database")
-    print(db.get_all_books())
-    print("Delete book from database")
-    db.delete_book("1234567890123")
-    print(db.get_all_books())
-    print("Update book in database")
-    db.add_book("1234567890123", "Title", "Author", "Publication")
-    db.update_book("1234567890123", "New Title", "New Author", "New Publication")
-    print(db.get_book("1234567890123"))
+    # print("Add book to database")
+    # db.add_book("1234567890123", "Title", "Author", "Publication")
+    # print("Boot from database")
+    # print(db.get_book("1234567890123"))
+    # db.add_book("2234567890123", "Title", "Author", "Publication")
+    # print("All books from database")
+    # print(db.get_all_books())
+    # print("Delete book from database")
+    # db.delete_book("1234567890123")
+    # print(db.get_all_books())
+    # print("Update book in database")
+    # db.add_book("1234567890123", "Title", "Author", "Publication")
+    # db.update_book("1234567890123", "New Title", "New Author", "New Publication")
+    # print(db.get_book("1234567890123"))
 
 
-    print("Add loan to database")
+    # print("Add loan to database")
     # db.add_loan(1, "1234567890123", "2020-01-01", "2020-01-15")
     # print(db.get_loan(1))
     # print(db.get_all_loans())

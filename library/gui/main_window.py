@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QErrorMessage
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt
 from library.gui import login, librarian_widget, user_widget
 from library.database import query
@@ -23,11 +23,15 @@ class MainWindow(QMainWindow):
         
         # Create a librarian button
         self.librarian_button = QPushButton("Librarian", self)
+        self.librarian_icon = QIcon("./library/gui/resources/librarian.png")
+        self.librarian_button.setIcon(self.librarian_icon)
         self.librarian_button.clicked.connect(self.set_librarian)
         self.librarian_button.clicked.connect(self.show_login_form)
 
         # Create a user button
         self.user_button = QPushButton("User", self)
+        self.user_icon = QIcon("./library/gui/resources/user.png")
+        self.user_button.setIcon(self.user_icon)
         self.user_button.clicked.connect(self.set_user)
         self.user_button.clicked.connect(self.show_login_form)
         
@@ -63,7 +67,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(QWidget())
         self.main_layout = QVBoxLayout()
         if self.user_type == "Librarian":
-            self.librarian_widget = librarian_widget.LibrarianWidget()
+            self.librarian_widget = librarian_widget.LibrarianWidget(self.library_database)
             self.main_layout.addWidget(self.librarian_widget)
         else:
             self.user = user_widget.User()
