@@ -1,88 +1,32 @@
-import sqlite3
-import os
-import hashlib
+from library.database.database import Database
 
-class Database:
+class Query(Database):
     def __init__(self):
-        # Create database
-        os.remove("library.db")
-        self.connection = sqlite3.connect("library.db")
-
-        # Create a cursor object 
-        self.cursor_object = self.connection.cursor()
-
-        # Create the logins table 
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS logins (
-                                        memberId INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        login TEXT NOT NULL, 
-                                        password BLOB NOT NULL
-                                    );''')
-
-        # Create memebers table
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS members (
-                                        memberId INTEGER PRIMARY KEY AUTOINCREMENT, 
-                                        name TEXT NOT NULL,
-                                        surname TEXT NOT NULL,
-                                        address TEXT NOT NULL,
-                                        FOREIGN KEY (memberId) REFERENCES logins (memberId)
-                                    );''')
-
-        # Create the books table                            
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS books (
-                                        ISBN TEXT PRIMARY KEY,
-                                        Title TEXT NOT NULL,
-                                        Author TEXT NOT NULL,
-                                        Publication TEXT NOT NULL
-                                    ); ''')
-
-        # Create the loans table
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS loans (
-                                        loanId INTEGER PRIMARY KEY,
-                                        memberId INTEGER NOT NULL,
-                                        ISBN TEXT NOT NULL,
-                                        loanDate TEXT NOT NULL,
-                                        returnDate TEXT NOT NULL,
-                                        FOREIGN KEY (memberId) REFERENCES members (memberId),
-                                        FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    );''')
-
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS reservations (
-                                        reservationId INTEGER PRIMARY KEY,
-                                        memberId INTEGER NOT NULL,
-                                        ISBN TEXT NOT NULL,
-                                        reservationDate TEXT NOT NULL,
-                                        FOREIGN KEY (memberId) REFERENCES members (memberId),
-                                        FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    );''')
-
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS fines (
-                                        fineId INTEGER PRIMARY KEY,
-                                        memberId INTEGER NOT NULL,
-                                        ISBN TEXT NOT NULL,
-                                        fineAmount REAL NOT NULL,
-                                        FOREIGN KEY (memberId) REFERENCES members (memberId),
-                                        FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    );''')
-
-        # Commit the changes
-        self.connection.commit()
-
+        super().__init__()
+        
     # Action for logins table
-    def get_login(self, login):
-        self.cursor_object.execute('''SELECT * FROM logins WHERE login = ?''', (login,))
+    def get_login(self, login, password):
+        self.cursor_object.execute('''SELECT * FROM logins WHERE login = ? AND password = ?''', (login, password))
         return self.cursor_object.fetchone()
 
     # Action for members table
     def add_member(self, login, password, name, surname, address):
-        hash_password = hashlib.sha256(password.encode()).hexdigest()
+        # hash_password = hashlib.sha256(password.encode()).hexdigest()
         self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', (login, hash_password))        
         self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', (name, surname, address))
         self.connection.commit()
-
+        
+    def delete_member(self, login, password):
+        pass
+    
 
     def get_member(self, memberId):
         self.cursor_object.execute('''SELECT * FROM members WHERE memberId = ?''', (memberId,))
         return self.cursor_object.fetchone()
+    
+    # def get_all_members(self):
+    #     self.cursor_object.execute('''SELECT * FROM members''')
+    #     return self.cursor_object.fetchall()
 
     # Action for books table
     def add_book(self, ISBN, title, author, publication):
@@ -95,9 +39,9 @@ class Database:
         return self.cursor_object.fetchone()
 
     
-    def get_all_books(self):
-        self.cursor_object.execute('''SELECT * FROM books''')
-        return self.cursor_object.fetchall()
+    # def get_all_books(self):
+    #     self.cursor_object.execute('''SELECT * FROM books''')
+    #     return self.cursor_object.fetchall()
 
 
     def delete_book(self, ISBN):
@@ -105,9 +49,10 @@ class Database:
         self.connection.commit()
 
 
-    def update_book(self, ISBN, title, author, publication):
-        self.cursor_object.execute('''UPDATE books SET Title = ?, Author = ?, Publication = ? WHERE ISBN = ?''', (title, author, publication, ISBN))
-        self.connection.commit()
+    # def update_book(self, ISBN, title, author, publication):
+    #     self.cursor_object.execute('''UPDATE books SET Title = ?, Author = ?, Publication = ? WHERE ISBN = ?''', (title, author, publication, ISBN))
+    #     self.connection.commit()
+        
 
     # Action for loans table
     def add_loan(self, memberId, ISBN, loanDate, returnDate):
@@ -120,10 +65,9 @@ class Database:
         return self.cursor_object.fetchone()
 
 
-    def get_all_loans(self):
-        self.cursor_object.execute('''SELECT * FROM loans''')
-        return self.cursor_object.fetchall()
-
+    # def get_all_loans(self):
+    #     self.cursor_object.execute('''SELECT * FROM loans''')
+    #     return self.cursor_object.fetchall()
 
     def delete_loan(self, loanId):
         self.cursor_object.execute('''DELETE FROM loans WHERE loanId = ?''', (loanId,))
@@ -140,9 +84,9 @@ class Database:
         return self.cursor_object.fetchone()
 
 
-    def get_all_reservations(self):
-        self.cursor_object.execute('''SELECT * FROM reservations''')
-        return self.cursor_object.fetchall()
+    # def get_all_reservations(self):
+    #     self.cursor_object.execute('''SELECT * FROM reservations''')
+    #     return self.cursor_object.fetchall()
 
 
     def delete_reservation(self, reservationId):
@@ -160,22 +104,18 @@ class Database:
         return self.cursor_object.fetchone()
 
 
-    def get_all_fines(self):
-        self.cursor_object.execute('''SELECT * FROM fines''')
-        return self.cursor_object.fetchall()
+    # def get_all_fines(self):
+    #     self.cursor_object.execute('''SELECT * FROM fines''')
+    #     return self.cursor_object.fetchall()
 
 
     def delete_fine(self, fineId):
         self.cursor_object.execute('''DELETE FROM fines WHERE fineId = ?''', (fineId,))
         self.connection.commit()
-
-
-    def close_connection(self):
-        self.connection.close()
-
-
+            
+            
 if __name__ == "__main__":
-    db = Database()
+    db = Query()
     # print("Add member to database")
     # db.add_member("admin", "admin", "Admin", "Big", "Admin Street 1")
     # db.add_member("user", "user", "User", "Small", "User Street 2")
