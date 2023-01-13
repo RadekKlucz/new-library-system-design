@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt, pyqtSignal, QObject
 
 
@@ -26,6 +26,8 @@ class Login(QWidget):
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.Password)
         self.submit_button = QPushButton("Submit")
+        self.submit_icon = QIcon("./library/gui/resources/submit-progress.png")
+        self.submit_button.setIcon(self.submit_icon)
         self.submit_button.clicked.connect(self.check_credentials)
         self.form_layout = QFormLayout()
         self.form_layout.addRow("Username", self.username_input)
