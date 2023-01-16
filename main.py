@@ -1,4 +1,4 @@
-from library.gui import main_window as mw
+from library.main.python.gui import main_window as mw
 from PyQt5.QtWidgets import QApplication
 import sys
 

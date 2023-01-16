@@ -1,6 +1,6 @@
 import sqlite3
 import os
-import hashlib
+# import hashlib
 
 class Database:
     def __init__(self):

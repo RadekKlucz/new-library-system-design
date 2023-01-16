@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout, QFrame
 from PyQt5.QtGui import QPixmap
-from library.gui.add_member_widget import AddMemberWidget
-from library.gui.get_member_details_widget import GetMember
+from library.main.python.gui.add_member_widget import AddMemberWidget
+from library.main.python.gui.get_member_details_widget import GetMember
 
 
 class LibrarianWidget(QWidget):

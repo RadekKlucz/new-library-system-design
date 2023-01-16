@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, pyqtSignal
 
 
 class Login(QWidget): 
@@ -15,7 +15,7 @@ class Login(QWidget):
         # Create the credentials' background
         
         self.label = QLabel(self)
-        self.background_pixmap = QPixmap("./library/gui/resources/second_background.jpg")
+        self.background_pixmap = QPixmap("./library/main/resources/second_background.jpg")
         self.label.setPixmap(self.background_pixmap)
         self.label.setGeometry(0, 0, self.frameGeometry().width(), self.frameGeometry().height())
         self.label.setAlignment(Qt.AlignCenter)
@@ -26,7 +26,7 @@ class Login(QWidget):
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.Password)
         self.submit_button = QPushButton("Submit")
-        self.submit_icon = QIcon("./library/gui/resources/submit-progress.png")
+        self.submit_icon = QIcon("./library/main/resources/submit-progress.png")
         self.submit_button.setIcon(self.submit_icon)
         self.submit_button.clicked.connect(self.check_credentials)
         self.form_layout = QFormLayout()

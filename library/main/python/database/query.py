@@ -1,4 +1,4 @@
-from library.database.database import Database
+from library.main.python.database import Database
 
 class Query(Database):
     def __init__(self):
