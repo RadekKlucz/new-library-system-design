@@ -1,4 +1,4 @@
-from library.main.python.database import Database
+from library.main.python.database.database import Database
 
 class Query(Database):
     def __init__(self):
@@ -16,19 +16,28 @@ class Query(Database):
         self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', (name, surname, address))
         self.connection.commit()
         
-    def delete_member(self, login, password):
-        pass
-    
+    def delete_member(self, login):        
+        member_id = self.cursor_object.execute('''SELECT memberId FROM logins WHERE login=?''', (login,))
+        member_id = member_id.fetchone()[0]
+        if member_id:
+            self.cursor_object.execute('''DELETE FROM logins WHERE login = ?''', (login,))
+            self.cursor_object.execute('''DELETE FROM members WHERE memberId = ?''', (member_id,))
+            self.connection.commit()
+            return True
+        else: 
+            return False
+
 
     def get_member(self, login):
-        self.cursor_object.execute('''SELECT members.memberID, members.name, members.surname, members.address FROM members 
-                                   INNER JOIN logins ON members.memberID = logins.memberId WHERE logins.login = ?''', (login,))
-        return self.cursor_object.fetchone()
-    
-    # def get_all_members(self):
-    #     self.cursor_object.execute('''SELECT * FROM members''')
-    #     return self.cursor_object.fetchall()
-
+        data = self.cursor_object.execute('''SELECT members.memberId, members.name, members.surname, members.address FROM members 
+                                   INNER JOIN logins ON members.memberId = logins.memberId WHERE logins.login = ?''', (login,))
+        if data:
+            result = data.fetchone()
+            if result:
+                column_names = [column[0] for column in data.description]
+                return dict(zip(column_names, result))
+        
+        
     # Action for books table
     def add_book(self, ISBN, title, author, publication):
         self.cursor_object.execute('''INSERT INTO books (ISBN, Title, Author, Publication) VALUES (?, ?, ?, ?)''', (ISBN, title, author, publication))
@@ -36,24 +45,18 @@ class Query(Database):
 
 
     def get_book(self, ISBN):
-        self.cursor_object.execute('''SELECT * FROM books WHERE ISBN = ?''', (ISBN,))
-        return self.cursor_object.fetchone()
-
-    
-    # def get_all_books(self):
-    #     self.cursor_object.execute('''SELECT * FROM books''')
-    #     return self.cursor_object.fetchall()
-
+        data = self.cursor_object.execute('''SELECT * FROM books WHERE ISBN = ?''', (ISBN,))
+        if data:
+            result = data.fetchone()
+            if result:
+                column_names = [column[0] for column in data.description]
+                return dict(zip(column_names, result))
+        
 
     def delete_book(self, ISBN):
         self.cursor_object.execute('''DELETE FROM books WHERE ISBN = ?''', (ISBN,))
         self.connection.commit()
-
-
-    # def update_book(self, ISBN, title, author, publication):
-    #     self.cursor_object.execute('''UPDATE books SET Title = ?, Author = ?, Publication = ? WHERE ISBN = ?''', (title, author, publication, ISBN))
-    #     self.connection.commit()
-        
+   
 
     # Action for loans table
     def add_loan(self, memberId, ISBN, loanDate, returnDate):
@@ -62,13 +65,15 @@ class Query(Database):
 
 
     def get_loan(self, loanId):
-        self.cursor_object.execute('''SELECT * FROM loans WHERE loanId = ?''', (loanId,))
-        return self.cursor_object.fetchone()
+        data = self.cursor_object.execute('''SELECT * FROM loans WHERE loanId = ?''', (loanId,))
+        if data:    
+            result = data.fetchone()
+            if result:
+                column_names = [column[0] for column in data.description]
+                return dict(zip(column_names, result))
+                
 
 
-    # def get_all_loans(self):
-    #     self.cursor_object.execute('''SELECT * FROM loans''')
-    #     return self.cursor_object.fetchall()
 
     def delete_loan(self, loanId):
         self.cursor_object.execute('''DELETE FROM loans WHERE loanId = ?''', (loanId,))
@@ -121,7 +126,7 @@ if __name__ == "__main__":
     db.add_member("admin", "admin", "Admin", "Big", "Admin Street 1")
     db.add_member("user", "user", "User", "Small", "User Street 2")
     print("Get member from database")
-    print(db.get_login("admin"))
+    print(db.get_login("ja"))
     print(db.get_member(1))
     print(db.get_member(2))
     print(db.get_login("user"))

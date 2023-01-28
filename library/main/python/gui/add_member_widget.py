@@ -4,7 +4,9 @@ class AddMemberWidget(QWidget):
     def __init__(self, database):
         self.database = database
         super().__init__()
+        
         # Create a new fields widget
+        self.description = QLabel("Please feel in information about new member: ")
         self.login_label = QLabel("Set Login:")
         self.login_edit = QLineEdit()
         self.password_label = QLabel("Set Password:")
@@ -14,12 +16,13 @@ class AddMemberWidget(QWidget):
         self.name_edit = QLineEdit()
         self.surname_label = QLabel("Surname:")
         self.surname_edit = QLineEdit()
-        self.address_label = QLabel("Address")
+        self.address_label = QLabel("Address:")
         self.address_edit = QLineEdit()
         self.submit_button = QPushButton("Submit")
         self.submit_button.clicked.connect(self.submit_clicked)
         self.message_label = QLabel()
         layout = QFormLayout()
+        layout.addRow(self.description)
         layout.addRow(self.login_label, self.login_edit)
         layout.addRow(self.password_label, self.password_edit)
         layout.addRow(self.name_label, self.name_edit)

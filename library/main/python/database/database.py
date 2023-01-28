@@ -65,7 +65,10 @@ class Database:
                                     );''')
 
         # Add start admin and user to tables
-        self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', ("admin", "admin1"))        
+        self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', ("admin", "admin1"))
+        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', ("admin", "admin", "admin"))
+        self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', ("user", "user1")) 
+        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', ("user", "user", "user"))
 
         # Commit the changes
         self.connection.commit()
