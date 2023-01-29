@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout, QFrame
+from PyQt5.QtGui import QIcon
 
 
 class GetBook(QWidget):
@@ -11,6 +12,8 @@ class GetBook(QWidget):
         self.isbn_label = QLabel("ISBN:")
         self.isbn_edit = QLineEdit()
         self.submit_button = QPushButton("Submit")
+        self.submit_icon = QIcon("./library/main/resources/submit-progress.png")
+        self.submit_button.setIcon(self.submit_icon)
         self.submit_button.clicked.connect(self.submit_clicked)
         self.message_label_1 = QLabel()
         self.message_label_2 = QLabel()
@@ -27,11 +30,11 @@ class GetBook(QWidget):
         layout.addRow(self.message_label_4)
         self.setLayout(layout)
         
+        
     def submit_clicked(self):
         isbn = self.isbn_edit.text()
         data = self.database.get_book(isbn)
         if data != None:
-            
             self.message_label_1.setText("IBSN: " + str(data["ISBN"]))
             self.message_label_2.setText("Title: " + data["Title"])
             self.message_label_3.setText("Author: " + data["Author"])
@@ -40,5 +43,4 @@ class GetBook(QWidget):
             self.message_label_1.setText("Couldn't find book.")
             self.message_label_2.setText("")
             self.message_label_3.setText("")
-            self.message_label_4.setText("")
-            
+            self.message_label_4.setText("")    

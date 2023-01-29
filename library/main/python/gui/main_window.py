@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
             self.librarian_widget = librarian_widget.LibrarianWidget(self.library_database)
             self.main_layout.addWidget(self.librarian_widget)
         else:
-            self.user = user_widget.User()
+            self.user = user_widget.User(self.library_database)
             self.main_layout.addWidget(self.user)
         self.centralWidget().setLayout(self.main_layout)
 

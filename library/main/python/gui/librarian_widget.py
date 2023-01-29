@@ -8,20 +8,23 @@ from library.main.python.gui.remove_book_widget import RemoveBook
 from library.main.python.gui.get_book_widget import GetBook
 from library.main.python.gui.add_load_widget import AddLoan
 from library.main.python.gui.get_loan_widget import GetLoan
+from library.main.python.gui.remove_loan_widget import RemoveLoan
+from library.main.python.gui.add_fine_widget import AddFine
+from library.main.python.gui.remove_fine_widget import RemoveFine
+from library.main.python.gui.get_fine_widget import GetFine
 
 
 class LibrarianWidget(QWidget):
     def __init__(self, database):
         super().__init__()
         self.database = database
-        # Create a new layout for the Librarian 
+        # Create a new layout for the librarian 
         self.layout = QVBoxLayout()
         
         # Create a new frame for the Librarian to display a data and buttons
         self.frame = QFrame()
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setLineWidth(1)
-
         self.frame_layout = QVBoxLayout()
         self.frame.setLayout(self.frame_layout)
                 
@@ -47,20 +50,7 @@ class LibrarianWidget(QWidget):
         self.remove_fine_button = QPushButton("Remove Fine")
         self.find_fine_button = QPushButton("Find Fine")
         
-        # # Create new frame for information label
-        # self.frame = QFrame()
-        # self.frame.setFrameStyle(QFrame.StyledPanel)
-        # self.frame.setFrameShadow(QFrame.Raised)
-        # self.frame.setLineWidth(2)
-        # self.frame.setMidLineWidth(2)
-        # self.frame.setStyleSheet("background-color:white;")
-        
-        # self.layout_frame = QVBoxLayout()
-        # self.layout_frame.addWidget(self.info_label)
-        # self.frame.setLayout(self.layout_frame)
-        
         # Add widgets to the layout
-        # Zamiast frame dodac jakies zdjecie do tla a to w nastepnym oknie
         self.layout.addWidget(self.add_member_button)
         self.layout.addWidget(self.remove_member_button)
         self.layout.addWidget(self.get_member_details_button)
@@ -76,7 +66,7 @@ class LibrarianWidget(QWidget):
         self.layout.addWidget(self.frame)
         self.setLayout(self.layout)
         
-        # self.remove_book_button.clicked.connect(self.remove_book_action)
+        # Set up actions for the buttons
         self.add_member_button.clicked.connect(self.show_add_member_widgets)
         self.get_member_details_button.clicked.connect(self.show_member_details_widgets)
         self.remove_member_button.clicked.connect(self.delete_user_widgets)
@@ -85,16 +75,10 @@ class LibrarianWidget(QWidget):
         self.find_book_button.clicked.connect(self.find_book_widgets)
         self.add_loan_button.clicked.connect(self.add_loan_widgets)
         self.find_loan_button.clicked.connect(self.get_loan_widgets)
-        # self.find_book_button.clicked.connect(self.find_book_action)
-        # dodac akcje dla każdego przycisku 
-    
-         # Information label 
-        # self.info_label = QLabel()
-        # self.info_label.setWordWrap(True)
-        
-        # self.layout = QFormLayout()
-        # self.layout.addWidget(self.frame)
-        # self.layout.addStretch()
+        self.remove_loan_button.clicked.connect(self.remove_loan_widgets)
+        self.add_fine_button.clicked.connect(self.add_fine_widgets)
+        self.remove_fine_button.clicked.connect(self.remove_fine_widgets)
+        self.find_fine_button.clicked.connect(self.get_fine_widgets)
         
     def show_add_member_widgets(self):
         self.add_member_widget = AddMemberWidget(self.database)
@@ -102,7 +86,6 @@ class LibrarianWidget(QWidget):
         self.frame_layout.addWidget(self.add_member_widget)
         self.setLayout(self.layout)
 
-        # self.setCentralWidget(self.add_member_widget)
         
     def show_member_details_widgets(self):
         self.get_member_details_widget = GetMember(self.database)
@@ -147,6 +130,32 @@ class LibrarianWidget(QWidget):
         self.frame_layout.addWidget(self.get_loan_widget)
         self.setLayout(self.layout)
         
+    
+    def remove_loan_widgets(self):
+        self.remove_loan_widget = RemoveLoan(self.database)
+        self.remove_widgets_from_frame()
+        self.frame_layout.addWidget(self.remove_loan_widget)
+        self.setLayout(self.layout)
+        
+    
+    def add_fine_widgets(self):
+        self.add_fine_widget = AddFine(self.database)
+        self.remove_widgets_from_frame()
+        self.frame_layout.addWidget(self.add_fine_widget)
+        self.setLayout(self.layout)
+        
+    def remove_fine_widgets(self):
+        self.remove_fine_widget = RemoveFine(self.database)
+        self.remove_widgets_from_frame()
+        self.frame_layout.addWidget(self.remove_fine_widget)
+        self.setLayout(self.layout)
+        
+    def get_fine_widgets(self):
+        self.get_fine_widget = GetFine(self.database)
+        self.remove_widgets_from_frame()
+        self.frame_layout.addWidget(self.get_fine_widget)
+        self.setLayout(self.layout)
+         
         
     def remove_widgets_from_frame(self):
         for i in reversed(range(self.frame_layout.count())):

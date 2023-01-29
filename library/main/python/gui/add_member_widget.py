@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout, QFrame
+from PyQt5.QtGui import QIcon
+
 
 class AddMemberWidget(QWidget):
     def __init__(self, database):
@@ -19,8 +21,11 @@ class AddMemberWidget(QWidget):
         self.address_label = QLabel("Address:")
         self.address_edit = QLineEdit()
         self.submit_button = QPushButton("Submit")
+        self.submit_icon = QIcon("./library/main/resources/submit-progress.png")
+        self.submit_button.setIcon(self.submit_icon)
         self.submit_button.clicked.connect(self.submit_clicked)
         self.message_label = QLabel()
+        
         layout = QFormLayout()
         layout.addRow(self.description)
         layout.addRow(self.login_label, self.login_edit)
@@ -33,7 +38,6 @@ class AddMemberWidget(QWidget):
         self.setLayout(layout)
         
         
-        
     def submit_clicked(self):
         login = self.login_edit.text()
         password = self.password_edit.text()
@@ -44,6 +48,5 @@ class AddMemberWidget(QWidget):
             self.database.add_member(login, password, name, surname, address)
             print(self.database.get_member(2))
             self.message_label.setText("Data submitted successfully.")
-
         else:
             self.message_label.setText("Please fill in all fields.")

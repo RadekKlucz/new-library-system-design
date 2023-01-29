@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout, QFrame
+from PyQt5.QtGui import QIcon
 
 
 class GetLoan(QWidget):
@@ -11,6 +12,8 @@ class GetLoan(QWidget):
         self.isbn_label = QLabel("Loan ID:")
         self.isbn_edit = QLineEdit()
         self.submit_button = QPushButton("Submit")
+        self.submit_icon = QIcon("./library/main/resources/submit-progress.png")
+        self.submit_button.setIcon(self.submit_icon)
         self.submit_button.clicked.connect(self.submit_clicked)
         self.message_label_1 = QLabel()
         self.message_label_2 = QLabel()
@@ -29,11 +32,11 @@ class GetLoan(QWidget):
         layout.addRow(self.message_label_5)
         self.setLayout(layout)
         
+        
     def submit_clicked(self):
         isbn = self.isbn_edit.text()
         data = self.database.get_loan(isbn)
-        if data != None:
-            
+        if data != None: 
             self.message_label_1.setText("Loan ID: " + str(data["loanId"]))
             self.message_label_2.setText("Member ID: " + str(data["memberId"]))
             self.message_label_3.setText("ISBN: " + str(data["ISBN"]))

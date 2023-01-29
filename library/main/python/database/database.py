@@ -5,7 +5,8 @@ import os
 class Database:
     def __init__(self):
         # Create database
-        os.remove("library.db")
+        # If you want to delete the database uncomment the following line:
+        # os.remove("library.db")
         self.connection = sqlite3.connect("library.db")
 
         # Create a cursor object 
@@ -14,7 +15,7 @@ class Database:
         # Create the logins table 
         self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS logins (
                                         memberId INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        login TEXT NOT NULL, 
+                                        login TEXT UNIQUE NOT NULL, 
                                         password BLOB NOT NULL
                                     );''')
 
@@ -46,15 +47,7 @@ class Database:
                                         FOREIGN KEY (ISBN) REFERENCES books (ISBN)
                                     );''')
 
-        self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS reservations (
-                                        reservationId INTEGER PRIMARY KEY,
-                                        memberId INTEGER NOT NULL,
-                                        ISBN TEXT NOT NULL,
-                                        reservationDate TEXT NOT NULL,
-                                        FOREIGN KEY (memberId) REFERENCES members (memberId),
-                                        FOREIGN KEY (ISBN) REFERENCES books (ISBN)
-                                    );''')
-
+        # Create the fines table
         self.cursor_object.execute('''CREATE TABLE IF NOT EXISTS fines (
                                         fineId INTEGER PRIMARY KEY,
                                         memberId INTEGER NOT NULL,
@@ -66,9 +59,9 @@ class Database:
 
         # Add start admin and user to tables
         self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', ("admin", "admin1"))
-        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', ("admin", "admin", "admin"))
+        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', ("Grzegorz", "Brzeczyszczykiewicz", "Szczopla 24E, 32-321 Wygielzlow"))
         self.cursor_object.execute('''INSERT INTO logins (login, password) VALUES (?, ?)''', ("user", "user1")) 
-        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', ("user", "user", "user"))
+        self.cursor_object.execute('''INSERT INTO members (name, surname, address) VALUES (?, ?, ?)''', ("Boniek", "Bonieczny", "Bolace Nogi 32, 21-370 Wieliczka"))
 
         # Commit the changes
         self.connection.commit()

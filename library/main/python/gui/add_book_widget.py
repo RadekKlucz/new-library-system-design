@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout, QFrame
+from PyQt5.QtGui import QIcon
 
 class AddBook(QWidget):
     def __init__(self, database):
@@ -16,6 +17,8 @@ class AddBook(QWidget):
         self.publication_label = QLabel("Publication:")
         self.publication_edit = QLineEdit()
         self.submit_button = QPushButton("Submit")
+        self.submit_icon = QIcon("./library/main/resources/submit-progress.png")
+        self.submit_button.setIcon(self.submit_icon)
         self.submit_button.clicked.connect(self.submit_clicked)
         self.message_label = QLabel()
         layout = QFormLayout()

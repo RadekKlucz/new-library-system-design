@@ -90,11 +90,6 @@ class Query(Database):
         return self.cursor_object.fetchone()
 
 
-    # def get_all_reservations(self):
-    #     self.cursor_object.execute('''SELECT * FROM reservations''')
-    #     return self.cursor_object.fetchall()
-
-
     def delete_reservation(self, reservationId):
         self.cursor_object.execute('''DELETE FROM reservations WHERE reservationId = ?''', (reservationId,))
         self.connection.commit()
@@ -106,13 +101,13 @@ class Query(Database):
 
 
     def get_fine(self, fineId):
-        self.cursor_object.execute('''SELECT * FROM fines WHERE fineId = ?''', (fineId,))
-        return self.cursor_object.fetchone()
-
-
-    # def get_all_fines(self):
-    #     self.cursor_object.execute('''SELECT * FROM fines''')
-    #     return self.cursor_object.fetchall()
+        data = self.cursor_object.execute('''SELECT * FROM fines WHERE fineId = ?''', (fineId,))
+        if data:
+            result = self.cursor_object.fetchone()
+            if result:
+                column_names = [column[0] for column in data.description]
+                return dict(zip(column_names, result))                
+        
 
 
     def delete_fine(self, fineId):

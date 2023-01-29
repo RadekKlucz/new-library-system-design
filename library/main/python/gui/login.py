@@ -13,7 +13,6 @@ class Login(QWidget):
         self.database = database
         
         # Create the credentials' background
-        
         self.label = QLabel(self)
         self.background_pixmap = QPixmap("./library/main/resources/second_background.jpg")
         self.label.setPixmap(self.background_pixmap)
@@ -37,8 +36,6 @@ class Login(QWidget):
         self.main_layout.addWidget(self.label)
         self.setLayout(self.main_layout)
         
-        
-             
              
     def check_credentials(self):
         username = self.username_input.text()
@@ -47,4 +44,4 @@ class Login(QWidget):
         if result:
             self.correct_credentials.emit()
         else:
-            self.incorrect_credentials.emit()
+            self.incorrect_credentials.emit()   

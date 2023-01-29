@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QFormLayout, QLabel, QVBoxLayout, QFrame
+from PyQt5.QtGui import QIcon
+
 
 class RemoveBook(QWidget):
     def __init__(self, database):
@@ -10,6 +12,8 @@ class RemoveBook(QWidget):
         self.isbn_label = QLabel("ISBN:")
         self.isbn_edit = QLineEdit()
         self.submit_button = QPushButton("Submit")
+        self.submit_button = QPushButton("Submit")
+        self.submit_icon = QIcon("./library/main/resources/submit-progress.png")
         self.submit_button.clicked.connect(self.submit_clicked)
         self.message_label = QLabel()
         layout = QFormLayout()
@@ -18,6 +22,7 @@ class RemoveBook(QWidget):
         layout.addRow(self.submit_button)
         layout.addRow(self.message_label)
         self.setLayout(layout)
+
 
     def submit_clicked(self):
         ibsn = self.isbn_edit.text()
