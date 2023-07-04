@@ -1,27 +1,54 @@
-# New-library-system-design
-Aplikacja systemu bibliotecznego, która to zapewnia kompleksowe usługi związane z podstawowymi czynnościami, które to może realizować zarówno użytkownik jak i również bibliotekarz. Aplikacja posiada własną bazę danych, w której to zainicjonowano pierwszych dwóch użytkowników. Dodatkowo dodano po jednej książce, wypożyczeniu oraz karze. System ten pozwala na podstawowe funkcjonowanie biblioteki, ale również posiada dużo możliwości rozwoju na przykład zaawansowane wyszukiwanie, szczegółowe dane na temat użytkownika,czy też rezerwacje książek. 
+# Project Description - New library system design
 
-Poniżej przedstawiono któtką instrukcję waraz z niezbędnymi informacjami do uruchomienia aplikacji. 
+## :keyboard:	About source code
+A library system application that provides comprehensive services related to basic actions that can be performed by both users and librarians. The application has its own database, in which the first two users have been initialized. Additionally, one book, one loan, and one fine have been added. This system allows for basic library functioning, but also has a lot of potential for development, such as advanced search, detailed user information, or book reservations.
 
-## Wymagane biblioteki
-W celu uruchomienia zainstaluj następujące bibioteki: 
+Below is a brief instruction with the necessary information to run the application.
+
+## 🧑‍💻 Technology stack
+To run the application, install the following libraries:
 - PyQt5
-- datatime
+- datetime
 - sqlite
 
-## Sposób uruchomiena aplikacji
-W konsoli należy wpisać następujący kod: 
+## 🎆 How to run project
+In the console, enter the following code:
 ```python
 python -u ./main.py
 ```
-## Dodatkowe informacje 
 
-Aby zalogować się do systemu należy wpisać następujące początkowe loginy. 
+## ℹ Additional Information
 
-Dla administratora:
-- Login: admin
-- Hasło: admin1
+To log in to the system, use the following initial credentials:
 
-Dla użytkownika: 
-- Login: user
-- Hasło: user1 
+For the administrator:
+- Username: admin
+- Password: admin1
+
+For the user:
+- Username: user
+- Password: user1
+
+## 🌠 Features
+
+## 📁 Directory Structure
+
+   ├───library
+        └───main
+        │   └───python
+        │         └───database
+        │         └───gui
+        │   └───resources
+        └───test
+          └───python
+              └───database_test
+
+## 📧 Contact
+
+[![LinkedIn](https://i.stack.imgur.com/gVE0j.png) Radosław Kluczewski](https:///www.linkedin.com/in/radoslaw-kluczewski) 
+&nbsp;
+[![GitHub](https://i.stack.imgur.com/tskMh.png) RadekKlucz](https://github.com/RadekKlucz)
+
+## License
+
+[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
