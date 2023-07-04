@@ -31,6 +31,17 @@ For the user:
 
 ## 🌠 Features
 
+## 📁 Directory Structure
+
+
+    ├───main
+        └───database
+        │   └───resources
+        │   └───python
+        │       └───database
+        │       └───gui
+        └───test
+
 ## 📧 Contact
 
 [![LinkedIn](https://i.stack.imgur.com/gVE0j.png) Radosław Kluczewski](https:///www.linkedin.com/in/radoslaw-kluczewski) 
