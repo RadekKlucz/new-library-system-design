@@ -31,18 +31,6 @@ For the user:
 
 ## 🌠 Features
 
-## 📁 Directory Structure
-
-   ├───library
-        └───main
-        │   └───python
-        │         └───database
-        │         └───gui
-        │   └───resources
-        └───test
-          └───python
-              └───database_test
-
 ## 📧 Contact
 
 [![LinkedIn](https://i.stack.imgur.com/gVE0j.png) Radosław Kluczewski](https:///www.linkedin.com/in/radoslaw-kluczewski) 
